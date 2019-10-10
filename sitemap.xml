@@ -3,13 +3,33 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://liweihao.me/tags/blog/</loc>
+    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://liweihao.me/posts/</loc>
-    <lastmod>2019-10-09T14:52:24+08:00</lastmod>
+    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://liweihao.me/tags/story/</loc>
+    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://liweihao.me/tags/</loc>
+    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://liweihao.me/posts/viper-on-etcd/</loc>
+    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://liweihao.me/</loc>
-    <lastmod>2019-10-09T14:52:24+08:00</lastmod>
+    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
   </url>
   
   <url>
@@ -19,10 +39,6 @@
   
   <url>
     <loc>http://liweihao.me/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>http://liweihao.me/tags/</loc>
   </url>
   
 </urlset>

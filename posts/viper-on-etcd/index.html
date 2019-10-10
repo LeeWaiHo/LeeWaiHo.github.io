@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+
+<title>
+Viper on Etcd - Winho Lee
+</title>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.min.81bbafc4df93b11c1c3e2449464373c384aa4903731b4fc7a77dfcdd979e184f.css" integrity="sha256-gbuvxN&#43;TsRwcPiRJRkNzw4SqSQNzG0/Hp3383ZeeGE8=" crossorigin="anonymous" media="screen">
+
+
+
+ 
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Didact+Gothic">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Viper on Etcd"/>
+<meta name="twitter:description" content="背景 希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化
+Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github.com/xordataexchange/crypt/backend/etcd/etcd.go:82附近
+// ... 省略其他代码 for { var resp *goetcd.Response var err error // if c.waitIndex == 0 { // resp, err = c.client.Get(key, false, false) // if err != nil { // respChan &lt;- &amp;backend.Response{nil, err} // time.Sleep(time.Second * 5) // continue // } // c.waitIndex = resp.EtcdIndex // respChan &lt;- &amp;backend.Response{[]byte(resp.Node.Value), nil} // } // resp, err = c.client.Watch(key, c.waitIndex&#43;1, false, nil, stop) resp, err = watcher."/>
+
+<meta property="og:title" content="Viper on Etcd" />
+<meta property="og:description" content="背景 希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化
+Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github.com/xordataexchange/crypt/backend/etcd/etcd.go:82附近
+// ... 省略其他代码 for { var resp *goetcd.Response var err error // if c.waitIndex == 0 { // resp, err = c.client.Get(key, false, false) // if err != nil { // respChan &lt;- &amp;backend.Response{nil, err} // time.Sleep(time.Second * 5) // continue // } // c.waitIndex = resp.EtcdIndex // respChan &lt;- &amp;backend.Response{[]byte(resp.Node.Value), nil} // } // resp, err = c.client.Watch(key, c.waitIndex&#43;1, false, nil, stop) resp, err = watcher." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://liweihao.me/posts/viper-on-etcd/" />
+<meta property="article:published_time" content="2019-10-10T17:01:41+08:00" />
+<meta property="article:modified_time" content="2019-10-10T17:01:41+08:00" />
+
+
+    
+
+    
+    
+    
+    <title>
+        
+        Viper on Etcd
+        
+    </title>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="section" id="title">Viper on Etcd</div>
+
+        
+<div class="section" id="content">
+    Thu Oct 10, 2019 &#183; 177 words
+    
+    <div class="tag-container">
+        
+        <span class="tag">
+            <a href="http://liweihao.me/tags/blog">
+                blog
+            </a>
+        </span>
+        
+        <span class="tag">
+            <a href="http://liweihao.me/tags/story">
+                story
+            </a>
+        </span>
+        
+    </div>
+    
+    <hr/>
+    
+
+<h2 id="背景">背景</h2>
+
+<p>希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化</p>
+
+<h2 id="viper是如何实现监听其变化的">Viper是如何实现监听其变化的?</h2>
+
+<p>通过查看源码发现
+在代码<code>$GOPATH/go/src/github.com/xordataexchange/crypt/backend/etcd/etcd.go:82</code><a href="https://github.com/xordataexchange/crypt/blob/master/backend/etcd/etcd.go#L91">附近</a></p>
+
+<pre><code class="language-go">// ... 省略其他代码
+
+for {
+    var resp *goetcd.Response
+    var err error
+    // if c.waitIndex == 0 {
+    // 	resp, err = c.client.Get(key, false, false)
+    // 	if err != nil {
+    // 		respChan &lt;- &amp;backend.Response{nil, err}
+    // 		time.Sleep(time.Second * 5)
+    // 		continue
+    // 	}
+    // 	c.waitIndex = resp.EtcdIndex
+    // 	respChan &lt;- &amp;backend.Response{[]byte(resp.Node.Value), nil}
+    // }
+    // resp, err = c.client.Watch(key, c.waitIndex+1, false, nil, stop)
+    resp, err = watcher.Next(ctx)
+    if err != nil {
+        respChan &lt;- &amp;backend.Response{nil, err}
+        time.Sleep(time.Second * 5)
+        continue
+    }
+    c.waitIndex = resp.Node.ModifiedIndex
+    respChan &lt;- &amp;backend.Response{[]byte(resp.Node.Value), nil}
+}
+
+// ... 省略其他代码
+</code></pre>
+
+<p>是通过 <code>Watcher.Next(ctx)</code>来实现的, 而这其中的<a href="https://github.com/etcd-io/etcd/blob/master/client/keys.go#L451">代码</a>是</p>
+
+<pre><code class="language-go">func (hw *httpWatcher) Next(ctx context.Context) (*Response, error) {
+	for {
+		httpresp, body, err := hw.client.Do(ctx, &amp;hw.nextWait)
+		if err != nil {
+			return nil, err
+		}
+
+		resp, err := unmarshalHTTPResponse(httpresp.StatusCode, httpresp.Header, body)
+		if err != nil {
+			if err == ErrEmptyBody {
+				continue
+			}
+			return nil, err
+		}
+
+		hw.nextWait.WaitIndex = resp.Node.ModifiedIndex + 1
+		return resp, nil
+	}
+}
+</code></pre>
+
+<p>在这里通过不断的发送http请求到<code>etcd服务端</code>来查询如果得到服务器的非异常响应则表示<strong>键值有变化</strong>,之后就会把response中的结果(即键值(文件内容))的字节给反序列化到viper.kvstore中 <a href="/Users/leewaiho/Workspaces/go/src/github.com/spf13/viper/viper.go">more</a></p>
+
+<h3 id="问题">问题</h3>
+
+<h4 id="轮询">轮询?</h4>
+
+<p>Q: 通过一个死循环去发送http请求轮询那CPU资源占用岂不是会很恐怖??
+A: 安啦, etcd-server watch功能采用的long polling设计, 因此发出的http请求会被阻塞住,直到server端有返回或者超时异常(在viper中会睡眠5s然后又重试咯)； 这个死循环中大部分时间都会阻塞在Socket-IO上不会占用很多的CPU。但是因为会阻塞，因此不能在业务线程中来Watch噢，而是应该在另外的线程中来处理，如果得到响应再通知业务线程更新配置。
+Ref:
+<a href="https://www.jianshu.com/p/95f33e991aa7">long polling(长轮询)详解</a>
+<a href="https://www.jianshu.com/p/95f33e991aa7">etcd watch</a>
+<a href="https://blog.csdn.net/zl1zl2zl3/article/details/79627412">Etcd 架构与实现解析</a></p>
+
+</div>
+
+
+        
+<div class="section bottom-menu">
+    
+
+    
+        <a href="/posts">back</a>
+        
+    
+
+    
+</p>
+</div>
+
+
+        <div class="section footer"></div>
+    </div>
+</body>
+
+</html>

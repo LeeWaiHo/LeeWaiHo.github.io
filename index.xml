@@ -6,10 +6,21 @@
     <description>Recent content on Winho Lee</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 09 Oct 2019 14:52:24 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 10 Oct 2019 17:01:41 +0800</lastBuildDate>
     
 	<atom:link href="http://liweihao.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Viper on Etcd</title>
+      <link>http://liweihao.me/posts/viper-on-etcd/</link>
+      <pubDate>Thu, 10 Oct 2019 17:01:41 +0800</pubDate>
+      
+      <guid>http://liweihao.me/posts/viper-on-etcd/</guid>
+      <description>背景 希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化
+Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github.com/xordataexchange/crypt/backend/etcd/etcd.go:82附近
+// ... 省略其他代码 for { var resp *goetcd.Response var err error // if c.waitIndex == 0 { // resp, err = c.client.Get(key, false, false) // if err != nil { // respChan &amp;lt;- &amp;amp;backend.Response{nil, err} // time.Sleep(time.Second * 5) // continue // } // c.waitIndex = resp.EtcdIndex // respChan &amp;lt;- &amp;amp;backend.Response{[]byte(resp.Node.Value), nil} // } // resp, err = c.client.Watch(key, c.waitIndex+1, false, nil, stop) resp, err = watcher.</description>
+    </item>
     
     <item>
       <title>搭建NFS服务器并应用于Docker Volume</title>
