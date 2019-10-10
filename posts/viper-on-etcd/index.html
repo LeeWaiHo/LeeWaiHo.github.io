@@ -35,13 +35,11 @@ Viper on Etcd - Winho Lee
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Viper on Etcd"/>
 <meta name="twitter:description" content="背景 希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化
-Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github.com/xordataexchange/crypt/backend/etcd/etcd.go:82附近
-// ... 省略其他代码 for { var resp *goetcd.Response var err error // if c.waitIndex == 0 { // resp, err = c.client.Get(key, false, false) // if err != nil { // respChan &lt;- &amp;backend.Response{nil, err} // time.Sleep(time.Second * 5) // continue // } // c.waitIndex = resp.EtcdIndex // respChan &lt;- &amp;backend.Response{[]byte(resp.Node.Value), nil} // } // resp, err = c.client.Watch(key, c.waitIndex&#43;1, false, nil, stop) resp, err = watcher."/>
+实现代码 package config import ( &quot;github.com/spf13/viper&quot; _ &quot;github.com/spf13/viper/remote&quot; ) const ( ProviderType = &quot;etcd&quot; ProviderEndpoint = &quot;http://192.168.1.63:2379&quot; Path = &quot;/config.json&quot; ) func Setup() *viper.Viper { c := viper.New() c.SetConfigType(&quot;json&quot;) if e := c.AddRemoteProvider(ProviderType, ProviderEndpoint, Path); e != nil { panic(e) } if e := c.ReadRemoteConfig(); e != nil { panic(e) } if e := c.WatchRemoteConfigOnChannel(); e != nil { panic(e) } return c }  Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github."/>
 
 <meta property="og:title" content="Viper on Etcd" />
 <meta property="og:description" content="背景 希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化
-Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github.com/xordataexchange/crypt/backend/etcd/etcd.go:82附近
-// ... 省略其他代码 for { var resp *goetcd.Response var err error // if c.waitIndex == 0 { // resp, err = c.client.Get(key, false, false) // if err != nil { // respChan &lt;- &amp;backend.Response{nil, err} // time.Sleep(time.Second * 5) // continue // } // c.waitIndex = resp.EtcdIndex // respChan &lt;- &amp;backend.Response{[]byte(resp.Node.Value), nil} // } // resp, err = c.client.Watch(key, c.waitIndex&#43;1, false, nil, stop) resp, err = watcher." />
+实现代码 package config import ( &quot;github.com/spf13/viper&quot; _ &quot;github.com/spf13/viper/remote&quot; ) const ( ProviderType = &quot;etcd&quot; ProviderEndpoint = &quot;http://192.168.1.63:2379&quot; Path = &quot;/config.json&quot; ) func Setup() *viper.Viper { c := viper.New() c.SetConfigType(&quot;json&quot;) if e := c.AddRemoteProvider(ProviderType, ProviderEndpoint, Path); e != nil { panic(e) } if e := c.ReadRemoteConfig(); e != nil { panic(e) } if e := c.WatchRemoteConfigOnChannel(); e != nil { panic(e) } return c }  Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://liweihao.me/posts/viper-on-etcd/" />
 <meta property="article:published_time" content="2019-10-10T17:01:41+08:00" />
@@ -66,7 +64,7 @@ Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPAT
 
         
 <div class="section" id="content">
-    Thu Oct 10, 2019 &#183; 177 words
+    Thu Oct 10, 2019 &#183; 241 words
     
     <div class="tag-container">
         
@@ -90,6 +88,38 @@ Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPAT
 <h2 id="背景">背景</h2>
 
 <p>希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化</p>
+
+<h2 id="实现代码">实现代码</h2>
+
+<pre><code>package config
+
+import (
+        &quot;github.com/spf13/viper&quot;
+        _ &quot;github.com/spf13/viper/remote&quot;
+)
+
+const (
+        ProviderType     = &quot;etcd&quot;
+        ProviderEndpoint = &quot;http://192.168.1.63:2379&quot;
+        Path             = &quot;/config.json&quot;
+)
+
+func Setup() *viper.Viper {
+        c := viper.New()
+        c.SetConfigType(&quot;json&quot;)
+        if e := c.AddRemoteProvider(ProviderType, ProviderEndpoint, Path); e != nil {
+                panic(e)
+        }
+        if e := c.ReadRemoteConfig(); e != nil {
+                panic(e)
+        }
+        if e := c.WatchRemoteConfigOnChannel(); e != nil {
+                panic(e)
+        }
+        return c
+}
+
+</code></pre>
 
 <h2 id="viper是如何实现监听其变化的">Viper是如何实现监听其变化的?</h2>
 
@@ -148,18 +178,23 @@ for {
 }
 </code></pre>
 
-<p>在这里通过不断的发送http请求到<code>etcd服务端</code>来查询如果得到服务器的非异常响应则表示<strong>键值有变化</strong>,之后就会把response中的结果(即键值(文件内容))的字节给反序列化到viper.kvstore中 <a href="/Users/leewaiho/Workspaces/go/src/github.com/spf13/viper/viper.go">more</a></p>
+<p>在这里通过不断的发送http请求到<code>etcd服务端</code>来查询如果得到服务器的非异常响应则表示<strong>键值有变化</strong>,之后就会把response中的结果(即键值(文件内容))的字节给反序列化到<code>viper.kvstore</code>中 <a href="/Users/leewaiho/Workspaces/go/src/github.com/spf13/viper/viper.go">more</a></p>
 
 <h3 id="问题">问题</h3>
 
 <h4 id="轮询">轮询?</h4>
 
-<p>Q: 通过一个死循环去发送http请求轮询那CPU资源占用岂不是会很恐怖??
-A: 安啦, etcd-server watch功能采用的long polling设计, 因此发出的http请求会被阻塞住,直到server端有返回或者超时异常(在viper中会睡眠5s然后又重试咯)； 这个死循环中大部分时间都会阻塞在Socket-IO上不会占用很多的CPU。但是因为会阻塞，因此不能在业务线程中来Watch噢，而是应该在另外的线程中来处理，如果得到响应再通知业务线程更新配置。
-Ref:
-<a href="https://www.jianshu.com/p/95f33e991aa7">long polling(长轮询)详解</a>
-<a href="https://www.jianshu.com/p/95f33e991aa7">etcd watch</a>
-<a href="https://blog.csdn.net/zl1zl2zl3/article/details/79627412">Etcd 架构与实现解析</a></p>
+<p>Q: 通过一个死循环去发送http请求轮询那CPU资源占用岂不是会很恐怖??</p>
+
+<p>A: 安啦, etcd-server watch功能采用的long polling设计, 因此发出的http请求会被阻塞住,直到server端有返回或者超时异常(在viper中会睡眠5s然后又重试咯)； 这个死循环中大部分时间都会阻塞在Socket-IO上不会占用很多的CPU。但是因为会阻塞，因此不能在业务线程中来Watch噢，而是应该在另外的线程中来处理，如果得到响应再通知业务线程更新配置。</p>
+
+<p>REFERENCE:</p>
+
+<ul>
+<li><a href="https://www.jianshu.com/p/95f33e991aa7">long polling(长轮询)详解</a></li>
+<li><a href="https://www.jianshu.com/p/95f33e991aa7">etcd watch</a></li>
+<li><a href="https://blog.csdn.net/zl1zl2zl3/article/details/79627412">Etcd 架构与实现解析</a></li>
+</ul>
 
 </div>
 
