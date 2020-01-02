@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>leewaiho</title>
-    <link>https://leewaiho.com/</link>
-    <description>Recent content on leewaiho</description>
+    <title>Posts on leewaiho</title>
+    <link>https://leewaiho.com/posts/</link>
+    <description>Recent content in Posts on leewaiho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 02 Jan 2020 09:01:42 +0800</lastBuildDate>
     
-	<atom:link href="https://leewaiho.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://leewaiho.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>

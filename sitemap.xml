@@ -3,11 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://leewaiho.com/categories/</loc>
+    <loc>https://leewaiho.com/</loc>
+    <lastmod>2020-01-02T09:01:42+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://leewaiho.com/</loc>
+    <loc>https://leewaiho.com/posts/</loc>
+    <lastmod>2020-01-02T09:01:42+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://leewaiho.com/posts/viper-on-etcd/</loc>
+    <lastmod>2020-01-02T09:01:42+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://leewaiho.com/categories/</loc>
   </url>
   
   <url>
