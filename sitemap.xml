@@ -1,44 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://liweihao.me/tags/blog/</loc>
-    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+    <loc>https://leewaiho.com/categories/</loc>
   </url>
   
   <url>
-    <loc>http://liweihao.me/posts/</loc>
-    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+    <loc>https://leewaiho.com/</loc>
   </url>
   
   <url>
-    <loc>http://liweihao.me/tags/story/</loc>
-    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
+    <loc>https://leewaiho.com/series/</loc>
   </url>
   
   <url>
-    <loc>http://liweihao.me/tags/</loc>
-    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://liweihao.me/posts/viper-on-etcd/</loc>
-    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://liweihao.me/</loc>
-    <lastmod>2019-10-10T17:01:41+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://liweihao.me/posts/create-nfs-server/</loc>
-    <lastmod>2019-10-09T14:52:24+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://liweihao.me/categories/</loc>
+    <loc>https://leewaiho.com/tags/</loc>
   </url>
   
 </urlset>

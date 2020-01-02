@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on Winho Lee</title>
-    <link>http://liweihao.me/categories/</link>
-    <description>Recent content in Categories on Winho Lee</description>
+    <title>Categories on leewaiho</title>
+    <link>https://leewaiho.com/categories/</link>
+    <description>Recent content in Categories on leewaiho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     
-	<atom:link href="http://liweihao.me/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://leewaiho.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

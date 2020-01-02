@@ -1,44 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Winho Lee</title>
-    <link>http://liweihao.me/</link>
-    <description>Recent content on Winho Lee</description>
+    <title>leewaiho</title>
+    <link>https://leewaiho.com/</link>
+    <description>Recent content on leewaiho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 10 Oct 2019 17:01:41 +0800</lastBuildDate>
     
-	<atom:link href="http://liweihao.me/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://leewaiho.com/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Viper on Etcd</title>
-      <link>http://liweihao.me/posts/viper-on-etcd/</link>
-      <pubDate>Thu, 10 Oct 2019 17:01:41 +0800</pubDate>
-      
-      <guid>http://liweihao.me/posts/viper-on-etcd/</guid>
-      <description>背景 希望在Go项目中使用Viper来读取Etcd中的配置文件并监听其变化
-实现代码 package config import ( &amp;quot;github.com/spf13/viper&amp;quot; _ &amp;quot;github.com/spf13/viper/remote&amp;quot; ) const ( ProviderType = &amp;quot;etcd&amp;quot; ProviderEndpoint = &amp;quot;http://192.168.1.63:2379&amp;quot; Path = &amp;quot;/config.json&amp;quot; ) func Setup() *viper.Viper { c := viper.New() c.SetConfigType(&amp;quot;json&amp;quot;) if e := c.AddRemoteProvider(ProviderType, ProviderEndpoint, Path); e != nil { panic(e) } if e := c.ReadRemoteConfig(); e != nil { panic(e) } if e := c.WatchRemoteConfigOnChannel(); e != nil { panic(e) } return c }  Viper是如何实现监听其变化的? 通过查看源码发现 在代码$GOPATH/go/src/github.</description>
-    </item>
-    
-    <item>
-      <title>搭建NFS服务器并应用于Docker Volume</title>
-      <link>http://liweihao.me/posts/create-nfs-server/</link>
-      <pubDate>Wed, 09 Oct 2019 14:52:24 +0800</pubDate>
-      
-      <guid>http://liweihao.me/posts/create-nfs-server/</guid>
-      <description>背景 希望能有一个结构清晰的文件系统供docker容器挂卷使用
-环境 系统: CentOS7 内核: 3.10.0-1062.1.1.el7.x86_64
-前提 安装好nfs相关组件 yum -y install nfs-utils  指定NFS匿名用户 创建操作系统用户组 groupadd data
-创建操作系统用户 useradd -M -G data storage-manager -s /sbin/nologin
-配置NFS卷 配置exports文件 vim /etc/exports 打开exports文件 输入如下配置
-/storage 10.20.0.0/24(rw,insecure,all_squash,no_subtree_check,anonuid=1000,anongid=1000)   /storage 挂载的目录 10.20.0.0/24 允许访问的机器(机器名orCIDR) (rw,insecure,all_squash,no_subtree_check,anonuid=1000,anongid=1000) 可读写,允许客户端使用1024以上端口访问, 所有访问者都被映射成nfs的anonymous用户, 如果用户能访问当前目录, 那么也能访问子目录, 指定anonymous用户在当前系统的用户uid和gid  刷新exports配置 exportfs -r
-查看本地exports配置 exportfs -v
-查看远程NFS服务器的卷 showmount -e 10.20.0.1
-拓展 docker volume使用nfs驱动 注意前提是 docker ce版本大于17.06
-参考资料: https://docs.docker.com/engine/reference/commandline/volume_create/
-docker volume create --driver local \ -o type=nfs \ -o o=addr=10.</description>
-    </item>
     
   </channel>
 </rss>
