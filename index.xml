@@ -6,10 +6,26 @@
     <description>Recent content on leewaiho</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 02 Jan 2020 09:01:42 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jan 2020 00:08:41 +0800</lastBuildDate>
     
 	<atom:link href="https://leewaiho.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>About</title>
+      <link>https://leewaiho.com/about/</link>
+      <pubDate>Sat, 04 Jan 2020 00:08:41 +0800</pubDate>
+      
+      <guid>https://leewaiho.com/about/</guid>
+      <description>Me 大家好， 我是leewaiho，是一个还在摸索进阶中的青年程序猿（头发还在）。18年毕业于一所非985、非211本科高校，目前就职于一家电商公司负责后端开发，使用语言是Golang，平常也会鼓捣一些其他语言（兴趣使然）。
+btw，我是个汉子，名花有主的那种，请不要对我有非分之想，请想都不要想！
+博客主要用于记录以下类型的内容：
+ 平常工作或个人兴趣项目遇到的技术问题及解决方案。(经常偷懒,请监督我！_(:3」∠)_) 生活趣事及心路历程。 碎碎念。  如果技术文章中有错误，亦或者有什么建议或者意见，也请各位大佬不吝赐教，当然如果有疑惑也欢迎留言或者邮件给我（在下面在下面）。 (งᵒ̴̶̷͈̀ㅂᵒ̴̶̷͈́)ง✧·
+最后谢谢你来看我，请多多指教。ヾ(´･ω･｀)ﾉ
+Contacts  Email: i@leewaiho.com  Links   lia - 一位可爱美丽且漂亮的前端开发工程猪，能歌善舞，又能写一手漂亮的代码，简直不能再棒了。
+  gobomb - 胸怀星辰大海的冒险家，沉着冷静，十分可靠。
+  </description>
+    </item>
     
     <item>
       <title>Viper On Etcd</title>
